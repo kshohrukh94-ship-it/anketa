@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Анкета — Надёжность персонала железнодорожного транспорта</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Geologica:wght@300;400;500;600&family=PT+Serif:ital@0;1&display=swap" rel="stylesheet">
+
+
 <style>
 /* ── RESET & BASE ── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -26,7 +26,7 @@
 }
 html { scroll-behavior: smooth; }
 body {
-  font-family: 'Geologica', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Tahoma, Arial, sans-serif;
   background: var(--bg);
   color: var(--ink);
   min-height: 100vh;
@@ -71,7 +71,7 @@ body {
   margin-bottom: 0.75rem;
 }
 .hero h1 {
-  font-family: 'PT Serif', serif;
+  font-family: Georgia, "Times New Roman", serif;
   font-size: clamp(18px, 4vw, 24px);
   font-weight: 400;
   line-height: 1.35;
@@ -178,7 +178,7 @@ body {
   font-size: 12.5px;
   color: var(--ink-muted);
   background: transparent;
-  font-family: 'Geologica', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Tahoma, Arial, sans-serif;
   transition: all 0.15s;
   white-space: nowrap;
 }
@@ -201,7 +201,7 @@ body {
   font-weight: 500;
   color: var(--ink-muted);
   background: transparent;
-  font-family: 'Geologica', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Tahoma, Arial, sans-serif;
   transition: all 0.15s;
   display: flex; align-items: center; justify-content: center;
 }
@@ -223,7 +223,7 @@ body {
   font-size: 12px;
   color: var(--ink-muted);
   background: transparent;
-  font-family: 'Geologica', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Tahoma, Arial, sans-serif;
   transition: all 0.15s;
 }
 .freq-btn:hover { border-color: var(--green-mid); color: var(--green-dark); }
@@ -232,7 +232,7 @@ body {
 /* ── TEXT INPUT / TEXTAREA ── */
 input[type=text], textarea {
   width: 100%;
-  font-family: 'Geologica', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Tahoma, Arial, sans-serif;
   font-size: 13.5px;
   color: var(--ink);
   background: #fafaf8;
@@ -258,7 +258,7 @@ textarea { min-height: 80px; resize: vertical; line-height: 1.6; }
   padding: 9px 22px;
   border-radius: 8px;
   font-size: 13.5px;
-  font-family: 'Geologica', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Tahoma, Arial, sans-serif;
   font-weight: 500;
   border: 1px solid var(--border-hover);
   background: transparent;
@@ -292,7 +292,7 @@ textarea { min-height: 80px; resize: vertical; line-height: 1.6; }
 }
 .done-icon svg { color: var(--green); }
 .done-title {
-  font-family: 'PT Serif', serif;
+  font-family: Georgia, "Times New Roman", serif;
   font-size: 22px;
   margin-bottom: 0.75rem;
   color: var(--ink);
@@ -366,6 +366,198 @@ textarea { min-height: 80px; resize: vertical; line-height: 1.6; }
 </style>
 </head>
 <body>
+
+<!-- Оверлей отправки -->
+<div class="sending-overlay" id="sendOverlay">
+  <div class="spinner"></div>
+  <div class="sending-text">Сохраняем ваши ответы…</div>
+</div>
+
+<div class="page">
+
+  <!-- ═══════════════════════════════════════════
+       ВАЖНО: замените URL ниже на ваш Apps Script
+  ════════════════════════════════════════════ -->
+  <div class="config-note" id="configNote">
+    ⚠️ <strong>Для автора:</strong> перед публикацией замените значение
+    <code>SCRIPT_URL</code> в коде на URL вашего Apps Script.
+    Инструкция прилагается в файле <strong>ИНСТРУКЦИЯ.txt</strong>.
+    После замены — удалите этот блок.
+  </div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-label">Ташкентский государственный транспортный университет</div>
+    <h1>Анкета мониторинга надёжности персонала и оценки влияния человеческого фактора на безопасность движения поездов</h1>
+    <p class="hero-sub">К магистерской диссертации «Улучшение системы надёжности и безошибочности работы в сфере железнодорожного транспорта путём минимизации влияния человеческих ошибок»</p>
+    <div class="hero-meta">
+      <span class="hero-chip">
+        <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Анонимно
+      </span>
+      <span class="hero-chip">
+        <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+        Конфиденциально
+      </span>
+      <span class="hero-chip">
+        <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        ~25–30 минут
+      </span>
+    </div>
+  </div>
+
+  <!-- ПРОГРЕСС -->
+  <div class="progress-wrap">
+    <div class="progress-label">
+      <span id="progLabel">Раздел 1 из 8</span>
+      <span id="progPct">12%</span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="prog" style="width:12%"></div></div>
+  </div>
+
+  <!-- ═══ ЛИСТ 1 ═══ -->
+  <div class="sheet active" id="sheet-0">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-badge">Лист 1</div>
+        <div class="card-title">Сведения о респонденте</div>
+        <div class="card-desc">Укажите общие сведения о себе.</div>
+      </div>
+      <div class="card-body">
+        <div class="q-row">
+          <div class="q-text"><span class="q-num">1.</span>Ваш пол</div>
+          <div class="opt-group" data-q="s0_1">
+            <div class="opt-btn" data-v="Мужской">Мужской</div>
+            <div class="opt-btn" data-v="Женский">Женский</div>
+          </div>
+        </div>
+        <div class="q-row">
+          <div class="q-text"><span class="q-num">2.</span>Ваш возраст</div>
+          <div class="opt-group" data-q="s0_2">
+            <div class="opt-btn" data-v="До 30 лет">До 30 лет</div>
+            <div class="opt-btn" data-v="30–45 лет">30–45 лет</div>
+            <div class="opt-btn" data-v="Старше 45 лет">Старше 45 лет</div>
+          </div>
+        </div>
+        <div class="q-row">
+          <div class="q-text"><span class="q-num">3.</span>Тип занятости</div>
+          <div class="opt-group" data-q="s0_3">
+            <div class="opt-btn" data-v="Постоянный работник">Постоянный работник</div>
+            <div class="opt-btn" data-v="Временный работник">Временный работник</div>
+          </div>
+        </div>
+        <div class="q-row">
+          <div class="q-text"><span class="q-num">4.</span>Ваша должность / профессия</div>
+          <input type="text" data-q="s0_4" placeholder="Укажите вашу должность…">
+        </div>
+        <div class="q-row">
+          <div class="q-text"><span class="q-num">5.</span>Общий стаж трудовой деятельности</div>
+          <div class="opt-group" data-q="s0_5">
+            <div class="opt-btn" data-v="До 5 лет">До 5 лет</div>
+            <div class="opt-btn" data-v="5–15 лет">5–15 лет</div>
+            <div class="opt-btn" data-v="Более 15 лет">Более 15 лет</div>
+          </div>
+        </div>
+        <div class="q-row">
+          <div class="q-text"><span class="q-num">6.</span>Стаж работы на данной должности</div>
+          <div class="opt-group" data-q="s0_6">
+            <div class="opt-btn" data-v="До 3 лет">До 3 лет</div>
+            <div class="opt-btn" data-v="3–10 лет">3–10 лет</div>
+            <div class="opt-btn" data-v="Более 10 лет">Более 10 лет</div>
+          </div>
+        </div>
+        <div class="q-row">
+          <div class="q-text"><span class="q-num">7.</span>Уровень образования</div>
+          <div class="opt-group" data-q="s0_7">
+            <div class="opt-btn" data-v="Среднее специальное">Среднее специальное</div>
+            <div class="opt-btn" data-v="Высшее">Высшее</div>
+            <div class="opt-btn" data-v="Магистратура и выше">Магистратура и выше</div>
+          </div>
+        </div>
+        <div class="q-row">
+          <div class="q-text"><span class="q-num">8.</span>Режим работы</div>
+          <div class="opt-group" data-q="s0_8">
+            <div class="opt-btn" data-v="Односменный (дневной)">Односменный (дневной)</div>
+            <div class="opt-btn" data-v="Многосменный">Многосменный</div>
+            <div class="opt-btn" data-v="Круглосуточный">Круглосуточный</div>
+          </div>
+        </div>
+      </div>
+      <div class="card-nav">
+        <span class="page-info">Раздел 1 из 8</span>
+        <button class="btn btn-primary" onclick="goNext(0)">Далее →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ ЛИСТЫ 2–7 генерируются JS ═══ -->
+  <div class="sheet" id="sheet-1"></div>
+  <div class="sheet" id="sheet-2"></div>
+  <div class="sheet" id="sheet-3"></div>
+  <div class="sheet" id="sheet-4"></div>
+  <div class="sheet" id="sheet-5"></div>
+  <div class="sheet" id="sheet-6"></div>
+
+  <!-- ═══ ЛИСТ 8 — открытые вопросы ═══ -->
+  <div class="sheet" id="sheet-7">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-badge">Лист 8</div>
+        <div class="card-title">Открытые вопросы</div>
+        <div class="card-desc">Ответьте в свободной форме. Ваш опыт крайне важен для исследования.</div>
+      </div>
+      <div class="card-body">
+        <div class="q-row">
+          <div class="q-text"><span class="q-num">1.</span>Укажите наиболее типичные ошибки персонала, которые вы наблюдали на рабочем месте (2–3 примера):</div>
+          <textarea data-q="s7_1" placeholder="Ваш ответ…"></textarea>
+        </div>
+        <div class="q-row">
+          <div class="q-text"><span class="q-num">2.</span>Какие организационные, технические или психологические факторы являются главными причинами этих ошибок?</div>
+          <textarea data-q="s7_2" placeholder="Ваш ответ…"></textarea>
+        </div>
+        <div class="q-row">
+          <div class="q-text"><span class="q-num">3.</span>Какие меры по снижению влияния человеческого фактора вы считаете наиболее эффективными и реализуемыми в вашей организации?</div>
+          <textarea data-q="s7_3" placeholder="Ваш ответ…"></textarea>
+        </div>
+        <div class="q-row">
+          <div class="q-text"><span class="q-num">4.</span>Какие изменения в системе обучения, подготовки или допуска персонала необходимо внести в первую очередь?</div>
+          <textarea data-q="s7_4" placeholder="Ваш ответ…"></textarea>
+        </div>
+        <div class="q-row">
+          <div class="q-text"><span class="q-num">5.</span>Есть ли у вас предложения по совершенствованию АСУ/АРМ с целью снижения вероятности ошибок оператора?</div>
+          <textarea data-q="s7_5" placeholder="Ваш ответ…"></textarea>
+        </div>
+        <div class="q-row">
+          <div class="q-text"><span class="q-num">6.</span>Любые иные наблюдения и предложения по теме надёжности и безошибочности работы:</div>
+          <textarea data-q="s7_6" placeholder="Ваш ответ…"></textarea>
+        </div>
+      </div>
+      <div class="card-nav">
+        <button class="btn" onclick="goBack(7)">← Назад</button>
+        <span class="page-info">Раздел 8 из 8</span>
+        <button class="btn btn-primary" id="submitBtn" onclick="submitSurvey()">Отправить ✓</button>
+      </div>
+      <div class="err-banner" id="errBanner">
+        Не удалось отправить данные. Проверьте подключение к интернету и попробуйте снова.
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ ЭКРАН ЗАВЕРШЕНИЯ ═══ -->
+  <div class="sheet" id="sheet-done">
+    <div class="done-card">
+      <div class="done-icon">
+        <svg width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+        </svg>
+      </div>
+      <div class="done-title">Спасибо за участие!</div>
+      <p class="done-text">Ваши ответы успешно сохранены и будут использованы исключительно в научных целях для разработки мероприятий по повышению надёжности и безопасности железнодорожного транспорта.</p>
+      <div class="done-author">Тухтаев Жавохир Фатхиддин угли<br>Магистрант ТГТУ, 2026 г.</div>
+    </div>
+  </div>
+
+</div><!-- /page -->
 
 <script>
 // ══════════════════════════════════════════════════
