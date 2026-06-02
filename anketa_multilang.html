@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Анкета / Anketa / Survey — Надёжность персонала</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --green: #0F6E56;
+  --green-light: #E1F5EE;
+  --green-mid: #1D9E75;
+  --green-dark: #085041;
+  --ink: #1a1a1a;
+  --ink-muted: #555;
+  --ink-hint: #999;
+  --surface: #fff;
+  --bg: #f5f3ef;
+  --border: rgba(0,0,0,0.1);
+  --border-hover: rgba(0,0,0,0.22);
+  --radius: 10px;
+  --shadow: 0 2px 12px rgba(0,0,0,0.07);
+}
+html { scroll-behavior: smooth; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Tahoma, Arial, sans-serif; background: var(--bg); color: var(--ink); min-height: 100vh; font-size: 15px; line-height: 1.6; }
+.page { max-width: 720px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+
+/* LANG SELECTOR */
+.lang-screen {
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--bg);
+}
+.lang-box {
+  background: var(--surface);
+  border-radius: 20px;
+  box-shadow: 0 4px 32px rgba(0,0,0,0.1);
+  padding: 3rem 2.5rem;
+  text-align: center;
+  max-width: 440px; width: 100%;
+  margin: 1.25rem;
+}
+.lang-logo {
+  width: 56px; height: 56px;
+  background: var(--green-light);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 1.5rem;
+  font-size: 24px;
+}
+.lang-title { font-size: 20px; font-weight: 600; color: var(--ink); margin-bottom: 6px; }
+.lang-sub { font-size: 13px; color: var(--ink-muted); margin-bottom: 2rem; line-height: 1.6; }
+.lang-btns { display: flex; flex-direction: column; gap: 10px; }
+.lang-btn {
+  cursor: pointer;
+  padding: 14px 20px;
+  border: 1.5px solid var(--border-hover);
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 500;
+  background: transparent;
+  color: var(--ink);
+  font-family: inherit;
+  transition: all 0.18s;
+  display: flex; align-items: center; gap: 12px;
+}
+.lang-btn:hover { border-color: var(--green); background: var(--green-light); color: var(--green-dark); }
+.lang-flag { font-size: 22px; }
+.lang-name { flex: 1; text-align: left; }
+.lang-native { font-size: 12px; color: var(--ink-hint); font-weight: 400; }
+
+/* HERO */
+.hero { background: var(--green-dark); color: #fff; border-radius: 16px; padding: 2.5rem 2rem 2rem; margin-bottom: 2rem; position: relative; overflow: hidden; }
+.hero::before { content:''; position:absolute; right:-40px; top:-40px; width:200px; height:200px; background:rgba(255,255,255,0.04); border-radius:50%; }
+.hero-label { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.5); margin-bottom: 0.75rem; }
+.hero h1 { font-size: clamp(17px, 4vw, 22px); font-weight: 500; line-height: 1.35; margin-bottom: 1rem; color: #fff; }
+.hero-sub { font-size: 13px; color: rgba(255,255,255,0.65); line-height: 1.6; }
+.hero-meta { margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.12); display: flex; gap: 1.5rem; flex-wrap: wrap; }
+.hero-chip { font-size: 12px; color: rgba(255,255,255,0.6); display: flex; align-items: center; gap: 5px; }
+.lang-switch-btn { cursor:pointer; float:right; margin-top:-4px; padding:5px 12px; border:1px solid rgba(255,255,255,0.3); border-radius:20px; font-size:12px; color:rgba(255,255,255,0.8); background:transparent; font-family:inherit; }
+.lang-switch-btn:hover { background:rgba(255,255,255,0.1); }
+
+/* PROGRESS */
+.progress-wrap { margin-bottom: 1.5rem; }
+.progress-label { display: flex; justify-content: space-between; font-size: 12px; color: var(--ink-hint); margin-bottom: 6px; }
+.progress-track { height: 3px; background: rgba(0,0,0,0.08); border-radius: 3px; overflow: hidden; }
+.progress-fill { height: 100%; background: var(--green-mid); border-radius: 3px; transition: width 0.5s cubic-bezier(.4,0,.2,1); }
+
+/* CARD */
+.sheet { display: none; }
+.sheet.active { display: block; }
+.card { background: var(--surface); border-radius: 14px; box-shadow: var(--shadow); border: 1px solid var(--border); overflow: hidden; }
+.card-header { padding: 1.5rem 1.75rem 1.25rem; border-bottom: 1px solid var(--border); }
+.card-badge { display: inline-block; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; background: var(--green-light); color: var(--green-dark); padding: 3px 10px; border-radius: 20px; margin-bottom: 8px; font-weight: 500; }
+.card-title { font-size: 16px; font-weight: 500; color: var(--ink); margin-bottom: 5px; }
+.card-desc { font-size: 13px; color: var(--ink-muted); }
+.card-body { padding: 0 1.75rem; }
+
+/* QUESTIONS */
+.q-row { padding: 1rem 0; border-bottom: 1px solid rgba(0,0,0,0.06); }
+.q-row:last-child { border-bottom: none; }
+.q-text { font-size: 13.5px; color: var(--ink); margin-bottom: 9px; line-height: 1.55; }
+.q-num { color: var(--ink-hint); margin-right: 4px; font-size: 12px; }
+.opt-group { display: flex; flex-wrap: wrap; gap: 6px; }
+.opt-btn { cursor: pointer; padding: 6px 13px; border: 1px solid var(--border-hover); border-radius: 20px; font-size: 12.5px; color: var(--ink-muted); background: transparent; font-family: inherit; transition: all 0.15s; white-space: nowrap; }
+.opt-btn:hover { border-color: var(--green-mid); color: var(--green-dark); }
+.opt-btn.sel { background: var(--green-light); border-color: var(--green); color: var(--green-dark); font-weight: 500; }
+.scale-wrap { display: flex; gap: 4px; align-items: center; flex-wrap: wrap; }
+.scale-btn { cursor: pointer; width: 38px; height: 38px; border: 1px solid var(--border-hover); border-radius: 8px; font-size: 13px; font-weight: 500; color: var(--ink-muted); background: transparent; font-family: inherit; transition: all 0.15s; display: flex; align-items: center; justify-content: center; }
+.scale-btn.np { font-size: 10px; width: auto; padding: 0 10px; }
+.scale-btn:hover { border-color: var(--green-mid); color: var(--green-dark); }
+.scale-btn.sel { background: var(--green-light); border-color: var(--green); color: var(--green-dark); }
+.scale-hint { font-size: 11px; color: var(--ink-hint); margin-top: 5px; }
+.freq-group { display: flex; flex-wrap: wrap; gap: 5px; }
+.freq-btn { cursor: pointer; padding: 5px 11px; border: 1px solid var(--border-hover); border-radius: 6px; font-size: 12px; color: var(--ink-muted); background: transparent; font-family: inherit; transition: all 0.15s; }
+.freq-btn:hover { border-color: var(--green-mid); color: var(--green-dark); }
+.freq-btn.sel { background: var(--green-light); border-color: var(--green); color: var(--green-dark); font-weight: 500; }
+input[type=text], textarea { width: 100%; font-family: inherit; font-size: 13.5px; color: var(--ink); background: #fafaf8; border: 1px solid var(--border-hover); border-radius: var(--radius); padding: 9px 12px; outline: none; transition: border-color 0.15s; }
+input[type=text]:focus, textarea:focus { border-color: var(--green-mid); background: #fff; }
+textarea { min-height: 80px; resize: vertical; line-height: 1.6; }
+
+/* NAV */
+.card-nav { display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 1.75rem; border-top: 1px solid var(--border); background: #fafaf8; }
+.page-info { font-size: 12px; color: var(--ink-hint); }
+.btn { cursor: pointer; padding: 9px 22px; border-radius: 8px; font-size: 13.5px; font-family: inherit; font-weight: 500; border: 1px solid var(--border-hover); background: transparent; color: var(--ink-muted); transition: all 0.15s; }
+.btn:hover { background: var(--bg); color: var(--ink); }
+.btn-primary { background: var(--green); color: #fff; border-color: var(--green); }
+.btn-primary:hover { background: var(--green-dark); border-color: var(--green-dark); color: #fff; }
+.btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* DONE */
+.done-card { background: var(--surface); border-radius: 14px; box-shadow: var(--shadow); border: 1px solid var(--border); padding: 3rem 2rem; text-align: center; }
+.done-icon { width: 64px; height: 64px; background: var(--green-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; }
+.done-title { font-size: 22px; font-weight: 600; margin-bottom: 0.75rem; }
+.done-text { font-size: 14px; color: var(--ink-muted); max-width: 380px; margin: 0 auto 1.5rem; line-height: 1.7; }
+.done-author { font-size: 12px; color: var(--ink-hint); font-style: italic; margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
+
+/* SENDING */
+.sending-overlay { display: none; position: fixed; inset: 0; background: rgba(255,255,255,0.85); backdrop-filter: blur(4px); z-index: 999; align-items: center; justify-content: center; flex-direction: column; gap: 1rem; }
+.sending-overlay.show { display: flex; }
+.spinner { width: 36px; height: 36px; border: 3px solid var(--green-light); border-top-color: var(--green); border-radius: 50%; animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.sending-text { font-size: 14px; color: var(--green-dark); font-weight: 500; }
+.err-banner { display: none; background: #fff0f0; border: 1px solid #fca5a5; border-radius: 8px; padding: 12px 16px; font-size: 13px; color: #991b1b; margin: 0 1.75rem 1rem; }
+.err-banner.show { display: block; }
+
+@media (max-width: 500px) {
+  .hero { padding: 1.75rem 1.25rem 1.5rem; }
+  .card-body { padding: 0 1.25rem; }
+  .card-header { padding: 1.25rem 1.25rem 1rem; }
+  .card-nav { padding: 1rem 1.25rem; }
+  .lang-box { padding: 2rem 1.5rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="sending-overlay" id="sendOverlay">
+  <div class="spinner"></div>
+  <div class="sending-text" id="sendingText">...</div>
+</div>
+
+<!-- ═══ ЭКРАН ВЫБОРА ЯЗЫКА ═══ -->
+<div class="lang-screen" id="langScreen">
+  <div class="lang-box">
+    <div class="lang-logo">🚂</div>
+    <div class="lang-title">Выберите язык</div>
+    <div class="lang-sub">Tanlang / Choose your language</div>
+    <div class="lang-btns">
+      <button class="lang-btn" onclick="selectLang('ru')">
+        <span class="lang-flag">🇷🇺</span>
+        <span class="lang-name">Русский <span class="lang-native">Russian</span></span>
+      </button>
+      <button class="lang-btn" onclick="selectLang('uz')">
+        <span class="lang-flag">🇺🇿</span>
+        <span class="lang-name">O'zbek <span class="lang-native">Uzbek</span></span>
+      </button>
+      <button class="lang-btn" onclick="selectLang('en')">
+        <span class="lang-flag">🇬🇧</span>
+        <span class="lang-name">English <span class="lang-native">Ingliz tili</span></span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ АНКЕТА ═══ -->
+<div id="surveyApp" style="display:none">
+<div class="page">
+  <div class="hero">
+    <button class="lang-switch-btn" onclick="switchLang()" id="langSwitchBtn">🌐 Язык</button>
+    <div class="hero-label" id="heroLabel"></div>
+    <h1 id="heroTitle"></h1>
+    <p class="hero-sub" id="heroSub"></p>
+    <div class="hero-meta">
+      <span class="hero-chip">🔒 <span id="chip1"></span></span>
+      <span class="hero-chip">✅ <span id="chip2"></span></span>
+      <span class="hero-chip">⏱ <span id="chip3"></span></span>
+    </div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-label">
+      <span id="progLabel"></span>
+      <span id="progPct">12%</span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="prog" style="width:12%"></div></div>
+  </div>
+
+  <div id="sheetContainer"></div>
+</div>
+</div>
+
+<script>
+// ══════════════════════════════════════
+// ЗАМЕНИТЕ НА ВАШ APPS SCRIPT URL
+// ══════════════════════════════════════
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwKaZdmxxADUBA0uyjMlwOuNRbRbiP6lgpQS4GMn0oVZVMAnhuQ9F3AduO26NJC79wI/exec";
+
+// ══════════════════════════════════════
+// ПЕРЕВОДЫ
+// ══════════════════════════════════════
+const T = {
+  ru: {
+    heroLabel: "Ташкентский государственный транспортный университет",
+    heroTitle: "Анкета мониторинга надёжности персонала и оценки влияния человеческого фактора на безопасность движения поездов",
+    heroSub: "К магистерской диссертации «Улучшение системы надёжности и безошибочности работы в сфере железнодорожного транспорта»",
+    chip1: "Анонимно", chip2: "Конфиденциально", chip3: "~25–30 минут",
+    langBtn: "🌐 Язык",
+    sectionOf: "Раздел {n} из 8",
+    next: "Далее →", back: "← Назад", submit: "Отправить ✓",
+    sending: "Сохраняем ваши ответы…",
+    doneTitle: "Спасибо за участие!",
+    doneText: "Ваши ответы успешно сохранены и будут использованы исключительно в научных целях.",
+    doneAuthor: "Тухтаев Жавохир Фатхиддин угли\nМагистрант ТГТУ, 2026 г.",
+    completed: "Завершено",
+    errMsg: "Не удалось отправить данные. Проверьте интернет и попробуйте снова.",
+    scaleHint: "5 — отлично, 1 — плохо, Н/П — не применимо",
+    yesNo: ["Да", "Не всегда / не в полном объёме", "Нет"],
+    freq: ["Постоянно", "~75%", "~50%", "~25%", "Никогда", "Не знаю"],
+    scale: ["5","4","3","2","1","Н/П"],
+    sheets: [
+      { badge:"Лист 1", title:"Сведения о респонденте", desc:"Укажите общие сведения о себе.", type:"personal" },
+      { badge:"Лист 2", title:"Профессиональная подготовка и надёжность персонала", desc:"Согласны ли вы со следующими утверждениями?", type:"yesno", key:"s1" },
+      { badge:"Лист 3", title:"Психофизиологическое состояние и факторы утомления", desc:"Насколько часто перечисленные состояния характерны для вас?", type:"freq", key:"s2" },
+      { badge:"Лист 4", title:"Организация трудового процесса и условия труда", desc:"Оцените параметры по шкале от 1 до 5.", type:"scale", key:"s3" },
+      { badge:"Лист 5", title:"Человеческий фактор: анализ причин ошибок", desc:"Насколько часто перечисленные факторы провоцируют ошибочные действия?", type:"freq", key:"s4" },
+      { badge:"Лист 6", title:"Система управления безопасностью движения", desc:"Согласны ли вы со следующими утверждениями?", type:"yesno", key:"s5" },
+      { badge:"Лист 7", title:"Оценка мер по минимизации человеческих ошибок", desc:"Оцените эффективность мер по шкале от 1 до 5.", type:"scale", key:"s6" },
+      { badge:"Лист 8", title:"Открытые вопросы", desc:"Ответьте в свободной форме.", type:"open" }
+    ],
+    personal: ["Ваш пол","Ваш возраст","Тип занятости","Ваша должность / профессия","Общий стаж трудовой деятельности","Стаж работы на данной должности","Уровень образования","Режим работы"],
+    personalOpts: [
+      ["Мужской","Женский"],
+      ["До 30 лет","30–45 лет","Старше 45 лет"],
+      ["Постоянный работник","Временный работник"],
+      null,
+      ["До 5 лет","5–15 лет","Более 15 лет"],
+      ["До 3 лет","3–10 лет","Более 10 лет"],
+      ["Среднее специальное","Высшее","Магистратура и выше"],
+      ["Односменный (дневной)","Многосменный","Круглосуточный"]
+    ],
+    s1:["Я в полной мере знаю инструкции, регламенты и нормативные документы, регулирующие мою профессиональную деятельность","Я регулярно прохожу инструктажи и плановое обучение, касающееся безопасности движения поездов","Содержание инструктажей соответствует реальным рабочим ситуациям и помогает мне избегать ошибок","Я умею распознавать признаки нестандартной (аварийной) ситуации заблаговременно","В случае нестандартной ситуации я точно знаю порядок своих действий согласно должностной инструкции","Я регулярно прохожу проверку знаний по вопросам безопасности движения","Мой уровень профессиональных знаний достаточен для безошибочного выполнения работы в условиях повышенной нагрузки","Тренажёрная подготовка (симуляторы, практические занятия) эффективно готовит меня к реальным условиям работы","Я прохожу регулярную психофизиологическую диагностику в рамках допуска к работе","В моём подразделении ведётся учёт профессиональных ошибок и анализ их причин","Я знаком с результатами расследований транспортных происшествий, произошедших в нашей организации","Опыт коллег и разбор прошлых инцидентов активно используется для предотвращения новых ошибок"],
+    s2:["Я чувствую выраженную усталость в течение рабочей смены","Я испытываю сонливость во время работы (особенно в ночное время или при монотонной деятельности)","Концентрация внимания у меня снижается к концу смены","Я допускаю ошибки при выполнении привычных операций из-за усталости или рассеянности","Высокий уровень стресса негативно влияет на качество моих рабочих решений","Я испытываю эмоциональное перенапряжение, связанное с ответственностью за безопасность","Психологический климат в коллективе ухудшает моё рабочее состояние","Тревога или беспокойство мешают мне сосредоточиться на рабочих задачах","Я испытываю трудности при переключении внимания между несколькими задачами одновременно","После сложных смен мне требуется значительное время для полного восстановления"],
+    s3:["Соответствие численности персонала объёму выполняемых задач","Чёткость распределения функциональных обязанностей между работниками","Качество технической документации, инструкций и нормативных актов","Удобство и наглядность систем отображения информации (приборы, мнемосхемы, мониторы АРМ)","Эргономика рабочего места (расположение органов управления, освещённость, шум)","Соответствие интерфейсов АСУ принципам минимизации ошибок оператора","Надёжность средств связи и передачи информации на рабочем месте","Организация сменности и режима труда и отдыха","Качество и достаточность средств индивидуальной и коллективной защиты","Наличие и доступность аварийных инструкций на рабочем месте"],
+    s4:["Информационная перегрузка: слишком много данных для одновременной обработки","Дефицит времени для принятия решения в оперативных ситуациях","Монотонность работы и снижение уровня бдительности при однотипных операциях","Нечёткость или противоречивость получаемых команд и указаний","Неисправность или нестабильная работа автоматизированных систем управления","Недостаточный обмен информацией при приёме-сдаче смены","Недооценка опасности ситуации вследствие привыкания к рутинным нарушениям","Неверная интерпретация показаний приборов или сигналов","Ошибки при выполнении нетипичных операций из-за недостаточной тренированности","Влияние неформальных норм поведения, противоречащих инструкциям","Давление со стороны руководства: требование ускорить выполнение в ущерб безопасности","Отвлечение внимания от основных задач посторонними воздействиями"],
+    s5:["В нашей организации функционирует СУБ, и я знаком с её целями","Политика безопасности доводится до работников в доступной форме","Практикуется добровольное анонимное сообщение об ошибках без риска наказания","Каждый инцидент систематически анализируется, и результаты доводятся до персонала","Мнения и предложения работников по вопросам безопасности реально учитываются","Руководитель лично демонстрирует приверженность принципам безопасности","Я уверен, что могу сообщить о нарушении без негативных последствий для себя","Применяются методы количественной оценки риска человеческого фактора (THERP, HRA)","Результаты психофизиологического контроля влияют на допуск к работе","Процедуры допуска к управлению подвижным составом строго соблюдаются","Применяются методологии RAMS / УРРАН для управления надёжностью","Предупредительные мероприятия носят системный, а не разовый характер"],
+    s6:["Автоматические системы защиты и предотвращения столкновений (КЛУБ-У, ETCS, АРС)","Системы мониторинга бдительности машиниста (педаль бдительности, видеонаблюдение)","Автоматизация рутинных операций с целью снижения нагрузки на оператора","Тренажёрная подготовка с моделированием нештатных ситуаций","Обязательный разбор происшествий и инцидентов с участием персонала","Психофизиологическое тестирование перед сменой","Чек-листы и карточки-напоминания для контроля критических операций","Оптимизация интерфейсов автоматизированных рабочих мест (эргономичный дизайн АРМ)","Совершенствование системы приёма и сдачи смены","Программы снижения стресса и психологической поддержки персонала","Обучение методам управления ошибками (CRM)","Цифровые системы управления нарядами и маршрутами","Аудит человеческого фактора (регулярные проверки рабочей среды)","Анонимная система добровольного сообщения об ошибках (АСВН)"],
+    open:["Укажите наиболее типичные ошибки персонала, которые вы наблюдали на рабочем месте (2–3 примера):","Какие организационные, технические или психологические факторы являются главными причинами этих ошибок?","Какие меры по снижению влияния человеческого фактора вы считаете наиболее эффективными?","Какие изменения в системе обучения, подготовки или допуска персонала необходимо внести в первую очередь?","Есть ли у вас предложения по совершенствованию АСУ/АРМ с целью снижения вероятности ошибок оператора?","Любые иные наблюдения и предложения по теме надёжности и безошибочности работы:"]
+  },
+
+  uz: {
+    heroLabel: "Toshkent davlat transport universiteti",
+    heroTitle: "Xodimlarning ishonchliligini monitoring qilish va inson omilining poyezdlar harakatining xavfsizligiga ta'sirini baholash bo'yicha anketa",
+    heroSub: "«Temir yo'l transportida ishonchlilik va xatosiz ish tizimini inson xatoliklarini minimallashtirilishi orqali takomillashtirish» magistrlik dissertatsiyasiga",
+    chip1: "Anonim", chip2: "Maxfiy", chip3: "~25–30 daqiqa",
+    langBtn: "🌐 Til",
+    sectionOf: "Bo'lim {n} / 8",
+    next: "Keyingisi →", back: "← Orqaga", submit: "Yuborish ✓",
+    sending: "Javoblaringiz saqlanmoqda…",
+    doneTitle: "Ishtirokingiz uchun rahmat!",
+    doneText: "Javoblaringiz muvaffaqiyatli saqlandi va faqat ilmiy maqsadlarda foydalaniladi.",
+    doneAuthor: "Tuxtayev Javohir Fatxiddin o'g'li\nTDTU magistranti, 2026 y.",
+    completed: "Yakunlandi",
+    errMsg: "Ma'lumotlarni yuborib bo'lmadi. Internetni tekshirib, qayta urinib ko'ring.",
+    scaleHint: "5 — a'lo, 1 — yomon, T/Y — tegishli emas",
+    yesNo: ["Ha", "Har doim ham emas / to'liq emas", "Yo'q"],
+    freq: ["Doimo", "~75%", "~50%", "~25%", "Hech qachon", "Bilmayman"],
+    scale: ["5","4","3","2","1","T/Y"],
+    sheets: [
+      { badge:"1-varaq", title:"Respondent haqida ma'lumot", desc:"O'zingiz haqingizda umumiy ma'lumotlarni ko'rsating.", type:"personal" },
+      { badge:"2-varaq", title:"Kasbiy tayyorgarlik va xodimlarning ishonchliligi", desc:"Quyidagi fikrlarga qo'shasizmi?", type:"yesno", key:"s1" },
+      { badge:"3-varaq", title:"Psixofiziologik holat va charchoq omillari", desc:"Sanab o'tilgan holatlar sizga qanchalik tez-tez xos?", type:"freq", key:"s2" },
+      { badge:"4-varaq", title:"Mehnat jarayonini tashkil etish va mehnat sharoitlari", desc:"Ko'rsatkichlarni 1 dan 5 gacha bo'lgan shkala bo'yicha baholang.", type:"scale", key:"s3" },
+      { badge:"5-varaq", title:"Inson omili: xato sabablarini tahlil qilish", desc:"Sanab o'tilgan omillar qanchalik tez-tez xato harakatlarga sabab bo'ladi?", type:"freq", key:"s4" },
+      { badge:"6-varaq", title:"Harakat xavfsizligini boshqarish tizimi", desc:"Quyidagi fikrlarga qo'shasizmi?", type:"yesno", key:"s5" },
+      { badge:"7-varaq", title:"Inson xatoliklarini minimallashtirishga qaratilgan chora-tadbirlarni baholash", desc:"Chora-tadbirlar samaradorligini 1 dan 5 gacha bo'lgan shkala bo'yicha baholang.", type:"scale", key:"s6" },
+      { badge:"8-varaq", title:"Ochiq savollar", desc:"Erkin shaklda javob bering.", type:"open" }
+    ],
+    personal:["Jinsingiz","Yoshingiz","Bandlik turi","Lavozimingiz / kasbingiz","Umumiy ish staji","Ushbu lavozimda ishlash staji","Ta'lim darajasi","Ish tartibi"],
+    personalOpts:[
+      ["Erkak","Ayol"],
+      ["30 yoshgacha","30–45 yosh","45 yoshdan katta"],
+      ["Doimiy xodim","Vaqtinchalik xodim"],
+      null,
+      ["5 yilgacha","5–15 yil","15 yildan ortiq"],
+      ["3 yilgacha","3–10 yil","10 yildan ortiq"],
+      ["O'rta maxsus","Oliy","Magistratura va undan yuqori"],
+      ["Bir smenali (kunduzgi)","Ko'p smenali","Kunduzu-kechasi"]
+    ],
+    s1:["Men o'z kasbiy faoliyatimni tartibga soluvchi ko'rsatmalar, reglamentlar va me'yoriy hujjatlarni to'liq bilaman","Men poyezdlar harakatining xavfsizligiga oid yo'riqnomalar va rejalashtirilgan o'qitishlardan muntazam o'taman","Yo'riqnomalar mazmuni real ish vaziyatlariga mos keladi va xatolardan qochishimga yordam beradi","Men standart bo'lmagan (favqulodda) vaziyat belgilarini oldindan aniqlay olaman","Standart bo'lmagan vaziyatda mansab yo'riqnomasiga muvofiq o'z harakatlarim tartibini aniq bilaman","Men harakat xavfsizligi bo'yicha bilimlarni muntazam tekshiruvdan o'taman","Mening kasbiy bilim darajam yuklama oshganda ham xatosiz ishlash uchun yetarli","Trenajyor tayyorgarlik (simulyatorlar, amaliy mashg'ulotlar) meni real ish sharoitlariga samarali tayyorlaydi","Men ishga yo'l qo'yish doirasida muntazam psixofiziologik diagnostikadan o'taman","Mening bo'limda kasbiy xatolar hisobga olinadi va ularning sabablari tahlil qilinadi","Men tashkilotimizdagi transport hodisalari tekshiruvi natijalari bilan tanishman","Hamkasblar tajribasi va o'tgan hodisalarni tahlil qilish yangi xatolarning oldini olish uchun faol qo'llaniladi"],
+    s2:["Men ish smenasi davomida ifodalangan charchoqni his qilaman","Men ish vaqtida uyquchanlikni his qilaman (ayniqsa kechasi yoki monoton faoliyat vaqtida)","Mening diqqat-e'tiborim smenaning oxirida pasayadi","Men charchoq yoki parishonxotirlik tufayli odatiy operatsiyalarni bajarishda xatoga yo'l qo'yaman","Yuqori stres darajasi mening ish qarorlarining sifatiga salbiy ta'sir ko'rsatadi","Men xavfsizlik uchun mas'uliyat bilan bog'liq hissiy ortiqcha zo'riqishni his qilaman","Jamoada psixologik iqlim mening ish holatimni yomonlashtiradi","Tashvish yoki xavotir mening ish vazifalariga to'la e'tibor berishimga xalaqit beradi","Men bir vaqtning o'zida bir nechta vazifalar o'rtasida diqqatni almashtirish qiyinchiligini his qilaman","Murakkab smenalardan keyin to'liq tiklanish uchun menga ko'p vaqt kerak bo'ladi"],
+    s3:["Xodimlar sonining bajarilayotgan vazifalar hajmiga muvofiqligi","Xodimlar o'rtasida funktsional vazifalarni taqsimlash ravshanligi","Texnik hujjatlar, ko'rsatmalar va me'yoriy aktlar sifati","Ma'lumot aks ettirish tizimlarining qulayligi va ko'rinarligi (asboblar, mnemotsxemalar, ARM monitorlari)","Ish joyining ergonomikasi (boshqaruv organlari joylashuvi, yorug'lik darajasi, shovqin)","ACS interfeyslarining operator xatolarini minimallashtirish tamoyillariga muvofiqligi","Ish joyida aloqa va axborot uzatish vositalarining ishonchliligi","Smenalilik va mehnat va dam olish rejimini tashkil etish","Shaxsiy va jamoaviy himoya vositalarining sifati va yetarliligi","Ish joyida favqulodda ko'rsatmalarning mavjudligi va mavjudligi"],
+    s4:["Axborot ortiqchaligi: bir vaqtning o'zida qayta ishlash uchun juda ko'p ma'lumot","Operativ vaziyatlarda qaror qabul qilish uchun vaqt tanqisligi","Bir xil operatsiyalarda ish monotonligi va hushyorlik darajasining pasayishi","Qabul qilingan buyruq va ko'rsatmalarning noaniqligi yoki ziddiyatliligi","Avtomatlashtirilgan boshqaruv tizimlarining nosozligi yoki beqaror ishlashi","Smena qabul qilish va topshirishda ma'lumot almashishning yetarli emasligi","Odatiy buzilishlarga ko'nikish natijasida vaziyat xavfini kam baholash","Asboblar ko'rsatmalari yoki signallarni noto'g'ri talqin qilish","Yetarli mashq qilmaslik tufayli nostandart operatsiyalarni bajarishdagi xatolar","Ko'rsatmalarga zid bo'lgan norasmiy xulq-atvor normalari ta'siri","Rahbariyat bosimi: xavfsizlikni hisobga olmagan holda ishni tezlashtirishni talab qilish","Begona ta'sirlar tufayli asosiy vazifalardan diqqatning chalg'ishi"],
+    s5:["Tashkilotimizda harakat xavfsizligini boshqarish tizimi (XBT) ishlaydi va men uning maqsadlari bilan tanishman","Xavfsizlik siyosati xodimlarga tushunarli shaklda etkaziladi","Bo'limda jazo xavfisiz ixtiyoriy (anonim) xatolar to'g'risida xabar berish amaliyoti mavjud","Har bir hodisa va xavfsizlik buzilishi tizimli tahlil qilinadi va natijalar xodimlarga etkaziladi","Xodimlarning xavfsizlik masalalari bo'yicha fikr va takliflari rahbariyat tomonidan hisobga olinadi","Bo'lim rahbari xavfsizlik tamoyillariga shaxsan rioya qilishini ko'rsatadi","Men shaxsim uchun salbiy oqibatlarsiz xavfsizlik buzilishi to'g'risida xabar bera olishimga aminman","Inson omili xavfini miqdoriy baholash usullari qo'llaniladi (THERP, HRA va boshq.)","Xodimlarni psixofiziologik nazorat qilish natijalari ishga yo'l qo'yishga real ta'sir ko'rsatadi","Harakatlanuvchi tarkibni boshqarishga yo'l qo'yish tartiblari qat'iy rioya etiladi","Ishonchlilikni boshqarish uchun RAMS / URRAN metodologiyalari qo'llaniladi","Inson omili ta'sirini kamaytirish bo'yicha profilaktika tadbirlari tizimli xarakter kasb etadi"],
+    s6:["Avtomatik himoya va to'qnashuvlarni oldini olish tizimlari (KLUB-U, ETCS, ARS va boshq.)","Mashinistning hushyorligini monitoring qilish tizimlari (hushyorlik pedali, videokuzatuv)","Operator yuklamasini kamaytirish maqsadida odatiy operatsiyalarni avtomatlashtirilishi","Favqulodda vaziyatlarni modellashtirish bilan trenajyor tayyorgarligi","Hodisalar va baxtsiz hodisalarni xodimlar ishtirokida majburiy ko'rib chiqish","Smenadan oldin psixofiziologik test o'tkazish","Muhim operatsiyalarni nazorat qilish uchun chek-listlar va eslatma kartochkalari","Avtomatlashtirilgan ish joylari interfeyslarini optimallashtirish (ergonomik ARM dizayni)","Smena qabul qilish va topshirish tizimini takomillashtirish","Xodimlarning stressini kamaytirish va psixologik yordam dasturlari","Xatolarni boshqarish usullariga o'qitish (CRM — Crew Resource Management)","Qo'lda kiritishni istisno qiladigan raqamli navbat va marshrut boshqaruv tizimlari","Inson omili auditi (ish muhitining xavfsizlik talablariga muvofiqligi bo'yicha muntazam tekshiruvlar)","Xatolar to'g'risida ixtiyoriy anonim xabar berish tizimi (IAXXT)"],
+    open:["Ish joyida kuzatgan xodimlarning eng tipik xatolarini ko'rsating (2–3 misol):","Qaysi tashkiliy, texnik yoki psixologik omillar ushbu xatolarning asosiy sabablari hisoblanadi?","Inson omili ta'sirini kamaytirish bo'yicha qaysi choralarni eng samarali deb hisoblaysiz?","Xodimlarni o'qitish, tayyorlash yoki ishga yo'l qo'yish tizimiga qanday o'zgartirishlar kiritish zarur?","Operator xatolari ehtimolini kamaytirish maqsadida ACS/ARM ni takomillashtirish bo'yicha takliflaringiz bormi?","Temir yo'l transportida ishonchlilik va xatosiz ishlash mavzusi bo'yicha boshqa kuzatuvlar va takliflar:"]
+  },
+
+  en: {
+    heroLabel: "Tashkent State Transport University",
+    heroTitle: "Questionnaire for Personnel Reliability Monitoring and Assessment of Human Factor Impact on Train Traffic Safety",
+    heroSub: "For the master's dissertation «Improving the System of Reliability and Error-Free Operation in Railway Transport by Minimizing the Impact of Human Errors»",
+    chip1: "Anonymous", chip2: "Confidential", chip3: "~25–30 minutes",
+    langBtn: "🌐 Language",
+    sectionOf: "Section {n} of 8",
+    next: "Next →", back: "← Back", submit: "Submit ✓",
+    sending: "Saving your answers…",
+    doneTitle: "Thank you for your participation!",
+    doneText: "Your answers have been saved and will be used exclusively for scientific purposes.",
+    doneAuthor: "Tuxtayev Javohir Fatkhiddin\nMaster's student, TSTU, 2026",
+    completed: "Completed",
+    errMsg: "Failed to submit. Please check your internet connection and try again.",
+    scaleHint: "5 — excellent, 1 — poor, N/A — not applicable",
+    yesNo: ["Yes", "Not always / not fully", "No"],
+    freq: ["Always", "~75%", "~50%", "~25%", "Never", "Don't know"],
+    scale: ["5","4","3","2","1","N/A"],
+    sheets: [
+      { badge:"Sheet 1", title:"Respondent Information", desc:"Please provide general information about yourself.", type:"personal" },
+      { badge:"Sheet 2", title:"Professional Training and Personnel Reliability", desc:"Do you agree with the following statements?", type:"yesno", key:"s1" },
+      { badge:"Sheet 3", title:"Psychophysiological State and Fatigue Factors", desc:"How often are the listed conditions characteristic of you at work?", type:"freq", key:"s2" },
+      { badge:"Sheet 4", title:"Work Process Organisation and Working Conditions", desc:"Rate each parameter on a scale from 1 to 5.", type:"scale", key:"s3" },
+      { badge:"Sheet 5", title:"Human Factor: Analysis of Error Causes", desc:"How often do the listed factors provoke erroneous actions?", type:"freq", key:"s4" },
+      { badge:"Sheet 6", title:"Traffic Safety Management System", desc:"Do you agree with the following statements?", type:"yesno", key:"s5" },
+      { badge:"Sheet 7", title:"Assessment of Human Error Minimisation Measures", desc:"Rate the effectiveness of measures on a scale from 1 to 5.", type:"scale", key:"s6" },
+      { badge:"Sheet 8", title:"Open Questions", desc:"Please answer in free form.", type:"open" }
+    ],
+    personal:["Your gender","Your age","Type of employment","Your position / profession","Total work experience","Experience in current position","Education level","Work schedule"],
+    personalOpts:[
+      ["Male","Female"],
+      ["Under 30","30–45","Over 45"],
+      ["Permanent employee","Temporary employee"],
+      null,
+      ["Under 5 years","5–15 years","Over 15 years"],
+      ["Under 3 years","3–10 years","Over 10 years"],
+      ["Secondary vocational","Higher education","Master's degree or above"],
+      ["Single shift (day)","Multi-shift","Round-the-clock"]
+    ],
+    s1:["I fully know the instructions, regulations and normative documents governing my professional activities","I regularly attend briefings and scheduled training on train traffic safety","The content of briefings corresponds to real work situations and helps me avoid mistakes","I can recognise signs of an abnormal (emergency) situation in advance","In an abnormal situation, I know exactly what to do according to my job instructions","I regularly pass knowledge checks on traffic safety issues","My level of professional knowledge is sufficient for error-free performance under high workload","Simulator training effectively prepares me for real working conditions","I undergo regular psychophysiological diagnostics as part of my admission to work","My unit keeps records of professional errors and analyses their causes","I am familiar with the results of investigations of transport incidents in our organisation","Colleagues' experience and analysis of past incidents are actively used to prevent new errors"],
+    s2:["I feel pronounced fatigue during the work shift","I experience drowsiness at work (especially at night or during monotonous activities)","My concentration decreases toward the end of the shift","I make mistakes in routine operations due to fatigue or absent-mindedness","High stress levels negatively affect the quality of my work decisions","I experience emotional strain related to responsibility for safety","The psychological climate in the team worsens my working condition","Anxiety or worry prevents me from focusing on work tasks","I have difficulty switching attention between several tasks simultaneously","After difficult shifts, I need significant time to fully recover"],
+    s3:["Adequacy of staffing levels to the volume of tasks (absence of overload)","Clarity of functional responsibilities distribution among workers","Quality of technical documentation, instructions and normative acts","Convenience and clarity of information display systems (instruments, mimic diagrams, workstation monitors)","Workplace ergonomics (control layout, lighting level, noise)","Compliance of ACS interfaces with error minimisation principles (clarity, logic)","Reliability of communication and information transmission means at the workplace","Organisation of shift work and work-rest schedule","Quality and adequacy of personal and collective protection equipment","Availability and accessibility of emergency instructions at the workplace"],
+    s4:["Information overload: too much data to process simultaneously","Lack of time to make a decision in operational situations","Work monotony and reduced vigilance during repetitive operations","Ambiguity or contradictory nature of received commands and instructions","Malfunction or unstable operation of automated control systems","Insufficient information exchange during shift handover","Underestimation of situational hazard due to habituation to routine violations","Misinterpretation of instrument readings or signals","Errors in performing atypical (rare) operations due to insufficient training","Influence of informal behavioural norms that contradict instructions","Management pressure: requirement to speed up work at the expense of safety","Distraction from main tasks by external influences"],
+    s5:["Our organisation has a functioning Traffic Safety Management System (TSMS) and I am familiar with its goals","Safety policy is communicated to employees in an accessible and understandable form","Voluntary (anonymous) reporting of errors and hazardous situations without risk of punishment is practised","Every incident and safety violation is systematically analysed and results are communicated to staff","Employees' opinions and suggestions on safety issues are genuinely considered by management","The unit manager personally demonstrates commitment to safety principles","I am confident I can report a safety violation without negative consequences for myself","Methods of quantitative human factor risk assessment are applied (THERP, HRA, etc.)","Results of personnel psychophysiological monitoring have a real impact on admission to work","Admission procedures for operating rolling stock are strictly observed","RAMS / URRAN methodologies for reliability management are applied","Preventive measures to reduce the influence of the human factor are systematic, not one-off"],
+    s6:["Automatic protection and collision prevention systems (KLUB-U, ETCS, ATC, etc.)","Driver vigilance monitoring systems (vigilance pedal, video surveillance)","Automation of routine operations to reduce operator workload","Simulator training with modelling of abnormal situations","Mandatory review of accidents and incidents with staff participation","Psychophysiological testing before a shift","Checklists and reminder cards for critical operation control","Optimisation of automated workstation interfaces (ergonomic workstation design)","Improvement of shift handover system (standardised information transfer protocol)","Stress reduction programmes and psychological support for personnel","Training in error management methods (CRM — Crew Resource Management)","Digital work order and route management systems excluding manual input","Human factor audit (regular checks of work environment compliance with safety requirements)","Anonymous voluntary error reporting system (AVERS)"],
+    open:["List the most typical personnel errors you have observed at the workplace (2–3 examples):","What organisational, technical or psychological factors are the main causes of these errors?","What human factor reduction measures do you consider most effective and implementable in your organisation?","What changes to the training, preparation or admission system should be made as a priority?","Do you have suggestions for improving ACS/workstations to reduce the probability of operator errors?","Any other observations and suggestions on reliability and error-free railway operations:"]
+  }
+};
+
+// ══════════════════════════════════════
+// STATE
+// ══════════════════════════════════════
+let lang = 'ru';
+let currentSheet = 0;
+const TOTAL = 8;
+const answers = {};
+
+function selectLang(l) {
+  lang = l;
+  document.getElementById('langScreen').style.display = 'none';
+  document.getElementById('surveyApp').style.display = 'block';
+  buildSurvey();
+}
+
+function switchLang() {
+  document.getElementById('surveyApp').style.display = 'none';
+  document.getElementById('langScreen').style.display = 'flex';
+}
+
+function t(key) { return T[lang][key]; }
+
+function buildSurvey() {
+  const L = T[lang];
+  document.getElementById('heroLabel').textContent = L.heroLabel;
+  document.getElementById('heroTitle').textContent = L.heroTitle;
+  document.getElementById('heroSub').textContent = L.heroSub;
+  document.getElementById('chip1').textContent = L.chip1;
+  document.getElementById('chip2').textContent = L.chip2;
+  document.getElementById('chip3').textContent = L.chip3;
+  document.getElementById('langSwitchBtn').textContent = L.langBtn;
+
+  const container = document.getElementById('sheetContainer');
+  container.innerHTML = '';
+  currentSheet = 0;
+
+  L.sheets.forEach((s, i) => {
+    const div = document.createElement('div');
+    div.className = 'sheet' + (i === 0 ? ' active' : '');
+    div.id = 'sheet-' + i;
+
+    let bodyHTML = '';
+    if (s.type === 'personal') {
+      L.personal.forEach((q, qi) => {
+        const key = 's0_' + (qi+1);
+        const opts = L.personalOpts[qi];
+        let ctrl = opts
+          ? `<div class="opt-group" data-q="${key}">${opts.map(o=>`<div class="opt-btn" data-v="${o}">${o}</div>`).join('')}</div>`
+          : `<input type="text" data-q="${key}" placeholder="…" value="${answers[key]||''}">`;
+        bodyHTML += `<div class="q-row"><div class="q-text"><span class="q-num">${qi+1}.</span>${q}</div>${ctrl}</div>`;
+      });
+    } else if (s.type === 'open') {
+      L.open.forEach((q, qi) => {
+        const key = 's7_' + (qi+1);
+        bodyHTML += `<div class="q-row"><div class="q-text"><span class="q-num">${qi+1}.</span>${q}</div><textarea data-q="${key}" placeholder="…">${answers[key]||''}</textarea></div>`;
+      });
+    } else {
+      const qs = L[s.key];
+      qs.forEach((q, qi) => {
+        const key = s.key + '_' + (qi+1);
+        let ctrl = '';
+        if (s.type === 'yesno') {
+          ctrl = `<div class="opt-group" data-q="${key}">${L.yesNo.map(o=>`<div class="opt-btn${answers[key]===o?' sel':''}" data-v="${o}">${o}</div>`).join('')}</div>`;
+        } else if (s.type === 'freq') {
+          ctrl = `<div class="freq-group" data-q="${key}">${L.freq.map(o=>`<div class="freq-btn${answers[key]===o?' sel':''}" data-v="${o}">${o}</div>`).join('')}</div>`;
+        } else if (s.type === 'scale') {
+          ctrl = `<div class="scale-wrap" data-q="${key}">${L.scale.map(o=>`<div class="scale-btn${o==='N/A'||o==='Н/П'||o==='T/Y'?' np':''}${answers[key]===o?' sel':''}" data-v="${o}">${o}</div>`).join('')}</div><div class="scale-hint">${L.scaleHint}</div>`;
+        }
+        bodyHTML += `<div class="q-row"><div class="q-text"><span class="q-num">${qi+1}.</span>${q}</div>${ctrl}</div>`;
+      });
+    }
+
+    const isFirst = i === 0, isLast = i === TOTAL - 1;
+    const navLabel = L.sectionOf.replace('{n}', i+1);
+    const submitOrNext = isLast
+      ? `<button class="btn btn-primary" id="submitBtn" onclick="submitSurvey()">${L.submit}</button>`
+      : `<button class="btn btn-primary" onclick="goNext(${i})">${L.next}</button>`;
+
+    div.innerHTML = `
+      <div class="card">
+        <div class="card-header">
+          <div class="card-badge">${s.badge}</div>
+          <div class="card-title">${s.title}</div>
+          <div class="card-desc">${s.desc}</div>
+        </div>
+        <div class="card-body">${bodyHTML}</div>
+        ${isLast ? '<div class="err-banner" id="errBanner"></div>' : ''}
+        <div class="card-nav">
+          ${isFirst ? '<span></span>' : `<button class="btn" onclick="goBack(${i})">${L.back}</button>`}
+          <span class="page-info">${navLabel}</span>
+          ${submitOrNext}
+        </div>
+      </div>`;
+    container.appendChild(div);
+  });
+
+  // Done screen
+  const done = document.createElement('div');
+  done.className = 'sheet';
+  done.id = 'sheet-done';
+  done.innerHTML = `<div class="done-card">
+    <div class="done-icon"><svg width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></div>
+    <div class="done-title">${L.doneTitle}</div>
+    <p class="done-text">${L.doneText}</p>
+    <div class="done-author">${L.doneAuthor.replace('\n','<br>')}</div>
+  </div>`;
+  container.appendChild(done);
+
+  document.getElementById('sendingText').textContent = L.sending;
+  updateProgress(0);
+  attachEvents();
+}
+
+function attachEvents() {
+  document.getElementById('sheetContainer').addEventListener('click', e => {
+    const btn = e.target.closest('.opt-btn, .freq-btn, .scale-btn');
+    if (!btn) return;
+    const group = btn.parentElement;
+    const q = group.dataset.q;
+    if (!q) return;
+    group.querySelectorAll('[data-v]').forEach(b => b.classList.remove('sel'));
+    btn.classList.add('sel');
+    answers[q] = btn.dataset.v;
+  });
+  document.getElementById('sheetContainer').addEventListener('input', e => {
+    if (e.target.dataset.q) answers[e.target.dataset.q] = e.target.value.trim();
+  });
+}
+
+function updateProgress(idx) {
+  const L = T[lang];
+  const pct = Math.round((idx + 1) / TOTAL * 100);
+  document.getElementById('prog').style.width = (idx >= TOTAL ? 100 : pct) + '%';
+  document.getElementById('progLabel').textContent = idx >= TOTAL ? L.completed : L.sectionOf.replace('{n}', idx+1);
+  document.getElementById('progPct').textContent = (idx >= TOTAL ? 100 : pct) + '%';
+}
+
+function setSheet(idx) {
+  document.querySelectorAll('.sheet').forEach(s => s.classList.remove('active'));
+  const target = idx < TOTAL ? 'sheet-' + idx : 'sheet-done';
+  document.getElementById(target).classList.add('active');
+  currentSheet = idx;
+  updateProgress(idx);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function goNext(from) { setSheet(from + 1); }
+function goBack(from) { setSheet(from - 1); }
+
+async function submitSurvey() {
+  const L = T[lang];
+  const btn = document.getElementById('submitBtn');
+  const errBanner = document.getElementById('errBanner');
+  if (errBanner) errBanner.classList.remove('show');
+  if (SCRIPT_URL === 'ВСТАВЬТЕ_ВАШ_URL_СЮДА') { alert('Please set SCRIPT_URL in the code.'); return; }
+  btn.disabled = true;
+  document.getElementById('sendOverlay').classList.add('show');
+  try {
+    await fetch(SCRIPT_URL, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ answers, lang }) });
+    document.getElementById('sendOverlay').classList.remove('show');
+    setSheet(TOTAL);
+  } catch(err) {
+    document.getElementById('sendOverlay').classList.remove('show');
+    btn.disabled = false;
+    if (errBanner) { errBanner.textContent = L.errMsg; errBanner.classList.add('show'); }
+  }
+}
+</script>
+</body>
+</html>
